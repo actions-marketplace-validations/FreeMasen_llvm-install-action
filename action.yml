@@ -1,0 +1,16 @@
+name: LLVM Install
+description: Install a dev version of llvm to the system
+inputs:
+  version:
+    description: The version of LLVM to install
+    required: true
+  base-url:
+    description: The base url for the release downloads
+    required: false
+    default: https://github.com/FreeMasen/llvm-builds/releases/download
+outputs:
+  directory:
+    description: Where llvm was installed
+runs:
+  using: node20
+  main: index.js
