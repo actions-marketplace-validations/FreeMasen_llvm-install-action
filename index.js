@@ -18,7 +18,7 @@ const platform = Object.freeze({
 
 let get_dest = () => path.join(process.cwd(), ".llvm");
 let untar = async (path, dest) => {
-    let exit = await exec("tar", ["xf", path, "-C", dest, ]);
+    let exit = await exec("tar", ["xf", path, "-C", dest, "--strip-components=1"]);
     if (exit !== 0) {
         throw new Error(`Failed to untar '${path}' into '${dest}'`);
     }
@@ -107,6 +107,7 @@ class Installer {
     let bin_dir = path.join(saved_location, "bin");
     console.log("adding bin_dir to PATH", bin_dir);
     addPath(bin_dir);
+    exec("ls", [bin_dir])
     return saved_location
 })().then(install_path => {
     console.log("Successfully installed llvm libs to", install_path);
