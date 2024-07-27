@@ -66,3 +66,26 @@ jobs:
           }
           & "$llvmDir\bin\llvm-config.exe" --version
           & llvm-config.exe --version
+  check_inkwell_1_60:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v4
+      - name: Install LLVM and Clang
+        id: install
+        uses: ./
+        with:
+          version: 16.0.6
+      - name: build test project
+        shell: bash
+        working-directory: ./check-llvm-sys
+        env:
+          LLVM_SYS_160_PREFIX: '${{ steps.install.outputs.directory }}'
+        run: cargo build
