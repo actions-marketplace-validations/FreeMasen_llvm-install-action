@@ -1,4 +1,4 @@
-import { setOutput, setFailed, addPath } from "@actions/core";
+import { setOutput, setFailed, addPath, exportVariable } from "@actions/core";
 import * as core from '@actions/core'
 import * as tc from "@actions/tool-cache";
 import { mkdirP } from "@actions/io";
@@ -32,6 +32,14 @@ let unseven = async (path, dest) => {
     return dest
 }
 
+/**
+ * @field base_url {string}
+ * @field version {string}
+ * @field prefix {string}
+ * @field arch {string}
+ * @field suffix {string}
+ * @field extension {string}
+ */
 class Installer {
     constructor() {
         this.base_url = core.getInput("base-url") || "https://github.com/FreeMasen/llvm-builds/releases/download"
@@ -84,6 +92,11 @@ class Installer {
         console.log("decompress->", ret);
         return ret
     }
+
+    env_var_name() {
+        let env_version = self.version.split('.').slice(0, 2).join("");
+        return `LLVM_SYS_${env_version}_PREFIX`;
+    }
 }
 
 (async () => {
@@ -107,7 +120,7 @@ class Installer {
     let bin_dir = path.join(saved_location, "bin");
     console.log("adding bin_dir to PATH", bin_dir);
     addPath(bin_dir);
-    exec("ls", [bin_dir])
+    exportVariable(installer.env_var_name(), saved_location);
     return saved_location
 })().then(install_path => {
     console.log("Successfully installed llvm libs to", install_path);
