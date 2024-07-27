@@ -94,7 +94,7 @@ class Installer {
     }
 
     env_var_name() {
-        let env_version = self.version.split('.').slice(0, 2).join("");
+        let env_version = this.version.split('.').slice(0, 2).join("");
         return `LLVM_SYS_${env_version}_PREFIX`;
     }
 }
