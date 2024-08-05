@@ -119,7 +119,9 @@ class Installer {
     console.log("decompressed into", saved_location);
     let bin_dir = path.join(saved_location, "bin");
     console.log("adding bin_dir to PATH", bin_dir);
-    addPath(bin_dir);
+    if (core.getInput("set-path") == "true") {
+        addPath(bin_dir);
+    }
     exportVariable(installer.env_var_name(), saved_location);
     return saved_location
 })().then(install_path => {

@@ -8,6 +8,10 @@ inputs:
     description: The base url for the release downloads
     required: false
     default: https://github.com/FreeMasen/llvm-builds/releases/download
+  set-path:
+    description: Update the PATH to include <llvm-dir>/bin
+    required: false
+    default: "true"
 outputs:
   directory:
     description: Where llvm was installed
